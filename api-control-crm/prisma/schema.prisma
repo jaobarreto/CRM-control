@@ -16,8 +16,25 @@ datasource db {
 model User {
   id        String   @id @unique @default(uuid())
   name      String
-  phone     String   @unique
+  phone     String?  @unique
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+}
+
+model Customer {
+  id               String       @id @unique @default(uuid())
+  name             String
+  email            String       @unique
+  phone            String?      @unique
+  address          String
+  type_of_customer CustomerType
+  document         String       @unique
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+enum CustomerType {
+  INDIVIDUAL
+  BUSINESS
 }
