@@ -1,26 +1,64 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
 export class CustomersService {
-  create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
+  constructor(private prisma: PrismaService) {}
+
+  async create(CreateCustomerDto: CreateCustomerDto) {
+    return this.prisma.customer.create({
+      data: {
+        name: CreateCustomerDto.name,
+        email: CreateCustomerDto.email,
+        phone: CreateCustomerDto.phone,
+        address: CreateCustomerDto.address,
+        type_of_customer: CreateCustomerDto.type_of_customer,
+        document: CreateCustomerDto.document,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all customers`;
+  async findAll() {
+    return this.prisma.customer.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        address: true,
+        type_of_customer: true,
+        document: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOne(id) {
+    return this.prisma.customer.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        address: true,
+        type_of_customer: true,
+        document: true,
+      },
+    });
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  async update(id, updateCustomerDto: UpdateCustomerDto) {
+    return this.prisma.customer.update({
+      where: { id },
+      data: updateCustomerDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
+  async remove(id: string) {
+    return this.prisma.customer.delete({
+      where: { id: String(id) },
+    });
   }
 }

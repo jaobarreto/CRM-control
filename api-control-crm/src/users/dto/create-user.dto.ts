@@ -14,7 +14,7 @@ export class CreateUserDto {
   @Matches(/^\(\d{2}\) \d{5}-\d{4}$/, {
     message: 'O número foi salvo no formato (XX) XXXXX-XXXX',
   })
-  phone: string;
+  phone?: string;
 
   @IsEmail()
   email: string;
